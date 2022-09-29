@@ -1,0 +1,170 @@
+---
+title: "Week 4 HW"
+output: html_document
+date: "2022-09-29"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+
+install.packages("forecast")
+install.packages("fma")
+install.packages("expsmooth")
+install.packages("lmtest")
+install.packages("zoo")
+install.packages("tseries")
+
+##Loading Packages
+
+```{r}
+
+
+library(fpp)
+library(fpp2)
+data()
+
+attributes(goog)
+plot(goog)
+Acf(goog)
+mean_forecast = meanf(goog,5)
+plot(mean_forecast)
+?meanf
+mean_forecast = meanf(goog,20)
+plot(mean_forecast)
+mean_forecast = meanf(goog,2)
+plot(mean_forecast)
+plot(goog)
+
+## Looks pretty spot on to the original plot
+
+naive_forecast = naive(goog,2)
+plot(naive_forecast)
+plot(goog)
+naive_forecast = naive(goog,5)
+plot(naive_forecast)
+plot(goog)
+
+## Appears to be a little less of a deviation
+
+rwfforecast = rwf(goog,5)
+plot(rwfforecast)
+plot(goog)
+rwfforecast = rwf(goog,5,drift=TRUE)
+snaive_forcast = snaive(goog,5)
+MA5Forcast = ma(goog,order=5)
+MA9Forcast = ma(goog,order=9)
+ 
+plot(mean_forecast)
+lines(naive_forecast$mean,col="green")
+lines(rwfforecast$mean,col="blue")
+lines(snaive_forcast$mean,col="yellow")
+lines(MA5Forcast,col="red")
+lines(MA9Forcast,col="pink")
+
+
+attributes(naive_forecast)
+etsforecast = ets(goog)
+plot(etsforecast)
+attributes(etsforecast)
+etsforecast$mse
+
+##Trying to run the HoltWinters command but keep returning time series has no or less than 2 periods. Looked this error up on google. Extracted the raw data and there are plenty more than 2 periods. Tried creating a smaller sample window and setting the frequency and then using HoltWinters and it still didnt work. 
+
+forecastets1= forecast.ets(etsforecast, h=5)
+plot(forecastets1)
+forecastets2= forecast(etsforecast, h=5)
+plot(forecastets2)
+
+library(forecast)
+
+attributes(gold)
+plot(gold)
+Acf(gold)
+mean_forecastG = meanf(gold,5)
+plot(mean_forecastG)
+plot(gold)
+
+
+naive_forecastG = naive(gold,5)
+plot(naive_forecastG)
+
+rwfforecastG = rwf(gold,5)
+plot(rwfforecastG)
+rwfforecastG = rwf(gold,5,drift=TRUE)
+snaive_forcastG = snaive(gold,5)
+MA5ForcastG = ma(gold,order=5)
+MA9ForcastG = ma(gold,order=9)
+ 
+plot(mean_forecastG)
+lines(naive_forecastG$mean,col="green")
+lines(rwfforecastG$mean,col="blue")
+lines(snaive_forcastG$mean,col="yellow")
+lines(MA5ForcastG,col="red")
+lines(MA9ForcastG,col="pink")
+
+attributes(naive_forecastG)
+etsforecastG = ets(gold)
+plot(etsforecastG)
+attributes(etsforecastG)
+etsforecastG$mse
+
+## Getting the same error on this data set when trying to run HoltWinters. Will ask about in class.
+
+attributes(ausbeer)
+plot(ausbeer)
+Acf(ausbeer)
+mean_forecastA = meanf(ausbeer)
+plot(mean_forecastA)
+plot(ausbeer)
+
+
+naive_forecastA = naive(ausbeer,5)
+plot(naive_forecastA)
+
+rwfforecastA = rwf(ausbeer,5)
+plot(rwfforecastA)
+rwfforecastA = rwf(ausbeer,5,drift=TRUE)
+snaive_forcastA = snaive(ausbeer,5)
+MA5ForcastA = ma(ausbeer,order=5)
+MA9ForcastA = ma(ausbeer,order=9)
+ 
+plot(mean_forecastA)
+lines(naive_forecastA$mean,col="green")
+lines(rwfforecastA$mean,col="blue")
+lines(snaive_forcastA$mean,col="yellow")
+lines(MA5ForcastA,col="red")
+lines(MA9ForcastA,col="pink")
+
+attributes(naive_forecastA)
+etsforecastA = ets(ausbeer)
+plot(etsforecastA)
+attributes(etsforecastA)
+etsforecastA$mse
+
+HW_forecast <- HoltWinters(ausbeer)
+plot(HW_forecast)
+
+SSESimple <- HoltWinters(ausbeer,beta=FALSE,gamma=FALSE)
+attributes(SSESimple)
+
+SSESimple$SSE
+head(SSESimple$fitted)
+
+forecast_ets_A = forecast.ets(etsforecastA,h=5)
+plot(forecast_ets_A)
+
+forecast_ets_2A = forecast.ets(etsforecastA,h=5)
+plot(forecast_ets_2A)
+
+
+
+```
+
